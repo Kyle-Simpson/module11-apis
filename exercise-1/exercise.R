@@ -6,6 +6,7 @@
 
 library("httr")
 library("jsonlite")
+library(dplyr)
 
 ## For these questions, look at the API documentation to identify the appropriate endpoint and information.
 ## Then send GET() request to fetch the data, then extract the answer to the question
@@ -20,8 +21,10 @@ body.1
 response.2 <- GET("http://data.unhcr.org/api/countries/list.json")
 body.2 <- content(response.2, "text")
 body.2 <- fromJSON(body.2)
-View(body.2)
-
+body.2 <- flatten(body.2)
+select(body.2, name_en, country_code) %>% 
+  filter(name_en == "Syrian Arab Republic") %>% 
+  select(country_code)
 
 # How many persons of concern from Syria applied for residence in the USA in 2013?
 # Hint: you'll need to use a query parameter
